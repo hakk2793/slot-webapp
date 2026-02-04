@@ -1,24 +1,21 @@
-const symbols = ["🍒", "🍋", "🔔", "🍉", "⭐"];
+const symbols = ["🍒", "🍋", "🔔", "⭐", "💎"];
 
-const slot1 = document.getElementById("slot1");
-const slot2 = document.getElementById("slot2");
-const slot3 = document.getElementById("slot3");
-
-const button = document.getElementById("spinBtn");
+const reel1 = document.getElementById("reel1");
+const reel2 = document.getElementById("reel2");
+const reel3 = document.getElementById("reel3");
 const result = document.getElementById("result");
+const button = document.getElementById("spinBtn");
 
 button.addEventListener("click", () => {
-  // Rastgele semboller
-  const s1 = symbols[Math.floor(Math.random() * symbols.length)];
-  const s2 = symbols[Math.floor(Math.random() * symbols.length)];
-  const s3 = symbols[Math.floor(Math.random() * symbols.length)];
+  const r1 = symbols[Math.floor(Math.random() * symbols.length)];
+  const r2 = symbols[Math.floor(Math.random() * symbols.length)];
+  const r3 = symbols[Math.floor(Math.random() * symbols.length)];
 
-  slot1.textContent = s1;
-  slot2.textContent = s2;
-  slot3.textContent = s3;
+  reel1.textContent = r1;
+  reel2.textContent = r2;
+  reel3.textContent = r3;
 
-  // Kazanma kontrolü
-  if (s1 === s2 && s2 === s3) {
+  if (r1 === r2 && r2 === r3) {
     result.textContent = "🎉 KAZANDIN!";
   } else {
     result.textContent = "😅 Tekrar dene";
