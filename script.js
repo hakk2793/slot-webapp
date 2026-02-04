@@ -1,23 +1,27 @@
-const symbols = ["🍒", "🍋", "🔔", "⭐", "💎"];
+const icons = ["🍒", "🍋", "🔔", "🍉", "⭐"];
 
-const reel1 = document.getElementById("reel1");
-const reel2 = document.getElementById("reel2");
-const reel3 = document.getElementById("reel3");
-const result = document.getElementById("result");
-const button = document.getElementById("spinBtn");
+function spin() {
+  const s1 = document.getElementById("slot1");
+  const s2 = document.getElementById("slot2");
+  const s3 = document.getElementById("slot3");
+  const result = document.getElementById("result");
 
-button.addEventListener("click", () => {
-  const r1 = symbols[Math.floor(Math.random() * symbols.length)];
-  const r2 = symbols[Math.floor(Math.random() * symbols.length)];
-  const r3 = symbols[Math.floor(Math.random() * symbols.length)];
+  if (!s1 || !s2 || !s3) {
+    alert("Slot elemanları bulunamadı!");
+    return;
+  }
 
-  reel1.textContent = r1;
-  reel2.textContent = r2;
-  reel3.textContent = r3;
+  const r1 = icons[Math.floor(Math.random() * icons.length)];
+  const r2 = icons[Math.floor(Math.random() * icons.length)];
+  const r3 = icons[Math.floor(Math.random() * icons.length)];
+
+  s1.textContent = r1;
+  s2.textContent = r2;
+  s3.textContent = r3;
 
   if (r1 === r2 && r2 === r3) {
     result.textContent = "🎉 KAZANDIN!";
   } else {
     result.textContent = "😅 Tekrar dene";
   }
-});
+}
