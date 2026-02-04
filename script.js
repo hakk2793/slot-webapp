@@ -1,27 +1,49 @@
-const icons = ["🍒", "🍋", "🔔", "🍉", "⭐"];
+const symbols = ["🍒", "🍋", "🔔", "🍉", "⭐"];
+const reels = [
+  document.getElementById("r1"),
+  document.getElementById("r2"),
+  document.getElementById("r3")
+];
 
-function spin() {
-  const s1 = document.getElementById("slot1");
-  const s2 = document.getElementById("slot2");
-  const s3 = document.getElementById("slot3");
-  const result = document.getElementById("result");
+const button = document.getElementById("spinBtn");
+const result = document.getElementById("result");
 
-  if (!s1 || !s2 || !s3) {
-    alert("Slot elemanları bulunamadı!");
-    return;
-  }
+let spinning = false;
 
-  const r1 = icons[Math.floor(Math.random() * icons.length)];
-  const r2 = icons[Math.floor(Math.random() * icons.length)];
-  const r3 = icons[Math.floor(Math.random() * icons.length)];
+button.addEventListener("click", () => {
+  if (spinning) return;
+  spinning = true;
+  result.textContent = "";
 
-  s1.textContent = r1;
-  s2.textContent = r2;
-  s3.textContent = r3;
+  let results = [];
 
-  if (r1 === r2 && r2 === r3) {
+  reels.forEach((reel, index) => {
+    let count = 0;
+    let interval = setInterval(() => {
+      reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      count++;
+    }, 100);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+      reel.textContent = finalSymbol;
+      results[index] = finalSymbol;
+
+      if (index === 2) {
+        checkWin(results);
+        spinning = false;
+      }
+    }, 1000 + index * 500);
+  });
+});
+
+function checkWin(arr) {
+  if (arr[0] === arr[1] && arr[1] === arr[2]) {
     result.textContent = "🎉 KAZANDIN!";
+    document.querySelector(".slot-box").style.boxShadow = "0 0 40px gold";
   } else {
-    result.textContent = "😅 Tekrar dene";
+    result.textContent = "😢 Kaybettin, tekrar dene";
+    document.querySelector(".slot-box").style.boxShadow = "0 0 25px gold";
   }
 }
