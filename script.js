@@ -1,89 +1,77 @@
-const symbols = ["🍒", "🍋", "🍊", "🍉", "⭐", "💎"];
-const reels = [
-  document.getElementById("r1"),
-  document.getElementById("r2"),
-  document.getElementById("r3"),
-  document.getElementById("r4"),
-  document.getElementById("r5")
-];
-
+// === ELEMENTLER ===
 const spinBtn = document.getElementById("spinBtn");
-const result = document.getElementById("result");
+const resultText = document.getElementById("result");
 const balanceEl = document.getElementById("balance");
-const slotBox = document.getElementById("slotBox");
+const slots = document.querySelectorAll(".slot");
 
-const spinSound = document.getElementById("spinSound");
-const winSound = document.getElementById("winSound");
-const jackpotSound = document.getElementById("jackpotSound");
+// === SESLER ===
+const spinSound = new Audio("sounds/spin.m4a");
+const winSound = new Audio("sounds/win.m4a");
+const jackpotSound = new Audio("sounds/jackpot.m4a");
+
+// === OYUN AYARLARI ===
+const symbols = ["🍒", "🍉", "🍋", "🍇", "⭐", "7️⃣"];
 
 let balance = 1000;
 const spinCost = 10;
 
+// === BAKİYEYİ GÜNCELLE ===
+function updateBalance(amount) {
+  balance += amount;
+  balanceEl.textContent = balance;
+}
+
+// === SPIN ===
 spinBtn.addEventListener("click", () => {
   if (balance < spinCost) {
-    result.textContent = "💸 Yetersiz bakiye!";
+    resultText.textContent = "❌ Yetersiz bakiye!";
     return;
   }
 
-  balance -= spinCost;
-  balanceEl.textContent = balance;
+  // Spin ücreti
+  updateBalance(-spinCost);
 
-  spinBtn.disabled = true;
-  result.textContent = "";
-  slotBox.className = "slot";
-
+  // Ses
   spinSound.currentTime = 0;
   spinSound.play();
 
-  let finalSymbols = [];
-
-  reels.forEach((reel, index) => {
-    let spins = 15 + index * 5;
-    let count = 0;
-
-    const interval = setInterval(() => {
-      reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-      count++;
-
-      if (count >= spins) {
-        clearInterval(interval);
-        finalSymbols[index] = reel.textContent;
-
-        if (finalSymbols.length === 5) {
-          checkWin(finalSymbols);
-          spinBtn.disabled = false;
-        }
-      }
-    }, 70);
+  // Slotları döndür
+  let results = [];
+  slots.forEach(slot => {
+    const rand = symbols[Math.floor(Math.random() * symbols.length)];
+    slot.textContent = rand;
+    results.push(rand);
   });
+
+  // Kazanç kontrolü
+  checkWin(results);
 });
 
-function checkWin(arr) {
-  const counts = {};
-  arr.forEach(s => counts[s] = (counts[s] || 0) + 1);
-  const max = Math.max(...Object.values(counts));
+// === KAZANÇ KONTROL ===
+function checkWin(results) {
+  const first = results[0];
+  const allSame = results.every(r => r === first);
 
-  let win = 0;
-
-  if (max === 5) {
-    win = 500;
-    result.textContent = "💥 JACKPOT!";
-    slotBox.classList.add("jackpot");
-    jackpotSound.play();
-  } else if (max === 4) {
-    win = 100;
-    result.textContent = "🔥 Büyük Kazanç!";
-    slotBox.classList.add("win");
+  if (allSame) {
+    // JACKPOT
+    if (first === "7️⃣") {
+      updateBalance(500);
+      jackpotSound.play();
+      resultText.textContent = "💥 JACKPOT! +500 💰";
+    } else {
+      updateBalance(200);
+      winSound.play();
+      resultText.textContent = "🎉 BÜYÜK KAZANÇ! +200";
+    }
+  } else if (new Set(results).size <= 3) {
+    // Küçük win
+    updateBalance(50);
     winSound.play();
-  } else if (max === 3) {
-    win = 30;
-    result.textContent = "✅ Kazandın!";
-    slotBox.classList.add("win");
-    winSound.play();
+    resultText.textContent = "✅ Kazandın! +50";
   } else {
-    result.textContent = "❌ Kaybettin";
+    resultText.textContent = "😅 Kaybettin";
   }
-
-  balance += win;
-  balanceEl.textContent = balance;
 }
+
+// === İLK YÜKLEME ===
+balanceEl.textContent = balance;
