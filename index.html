@@ -9,9 +9,13 @@
 <body>
 
   <div class="slot-container">
-    <h1>🎰 SLOT GAME 🎰</h1>
+    <div class="top-bar">
+      💰 Bakiye: <span id="balance">1000</span>
+    </div>
 
-    <div class="slot">
+    <h1>🎰 SLOT 🎰</h1>
+
+    <div class="slot" id="slotBox">
       <div class="reel" id="r1">🍒</div>
       <div class="reel" id="r2">🍋</div>
       <div class="reel" id="r3">🍊</div>
@@ -19,9 +23,13 @@
       <div class="reel" id="r5">⭐</div>
     </div>
 
-    <button id="spinBtn">ÇEVİR</button>
+    <button id="spinBtn">ÇEVİR (-10)</button>
     <div id="result"></div>
   </div>
+
+  <audio id="spinSound" src="sounds/spin.mp3"></audio>
+  <audio id="winSound" src="sounds/win.mp3"></audio>
+  <audio id="jackpotSound" src="sounds/jackpot.mp3"></audio>
 
   <script src="script.js"></script>
 </body>
