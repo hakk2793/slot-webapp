@@ -1,49 +1,58 @@
-const symbols = ["🍒", "🍋", "🔔", "🍉", "⭐"];
+const symbols = ["🍒", "🍋", "🍊", "🍉", "⭐", "💎"];
 const reels = [
   document.getElementById("r1"),
   document.getElementById("r2"),
-  document.getElementById("r3")
+  document.getElementById("r3"),
+  document.getElementById("r4"),
+  document.getElementById("r5")
 ];
 
 const button = document.getElementById("spinBtn");
 const result = document.getElementById("result");
 
-let spinning = false;
-
 button.addEventListener("click", () => {
-  if (spinning) return;
-  spinning = true;
+  button.disabled = true;
   result.textContent = "";
 
-  let results = [];
+  let finalSymbols = [];
 
   reels.forEach((reel, index) => {
+    let spins = 15 + index * 5;
     let count = 0;
-    let interval = setInterval(() => {
+
+    const interval = setInterval(() => {
       reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
       count++;
-    }, 100);
 
-    setTimeout(() => {
-      clearInterval(interval);
-      const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-      reel.textContent = finalSymbol;
-      results[index] = finalSymbol;
+      if (count >= spins) {
+        clearInterval(interval);
+        finalSymbols[index] = reel.textContent;
 
-      if (index === 2) {
-        checkWin(results);
-        spinning = false;
+        if (finalSymbols.length === 5) {
+          checkWin(finalSymbols);
+          button.disabled = false;
+        }
       }
-    }, 1000 + index * 500);
+    }, 70);
   });
 });
 
 function checkWin(arr) {
-  if (arr[0] === arr[1] && arr[1] === arr[2]) {
-    result.textContent = "🎉 KAZANDIN!";
-    document.querySelector(".slot-box").style.boxShadow = "0 0 40px gold";
+  const counts = {};
+  arr.forEach(s => counts[s] = (counts[s] || 0) + 1);
+  const max = Math.max(...Object.values(counts));
+
+  if (max === 5) {
+    result.textContent = "💥 JACKPOT! 💥";
+    result.style.color = "gold";
+  } else if (max === 4) {
+    result.textContent = "🔥 BÜYÜK KAZANÇ!";
+    result.style.color = "orange";
+  } else if (max === 3) {
+    result.textContent = "✅ KAZANDIN!";
+    result.style.color = "lime";
   } else {
-    result.textContent = "😢 Kaybettin, tekrar dene";
-    document.querySelector(".slot-box").style.boxShadow = "0 0 25px gold";
+    result.textContent = "❌ Kaybettin";
+    result.style.color = "#ccc";
   }
 }
