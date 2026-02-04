@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Slot Oyunu</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="container">
-    <h1>🎰 SLOT OYUNU</h1>
+    <div class="slot-box">
+      <h1>🎰 SLOT OYUNU</h1>
 
-    <div class="slot">
-      <span id="slot1">🍒</span>
-      <span id="slot2">🍋</span>
-      <span id="slot3">🔔</span>
+      <div class="reels">
+        <div class="reel" id="r1">🍒</div>
+        <div class="reel" id="r2">🍋</div>
+        <div class="reel" id="r3">🔔</div>
+      </div>
+
+      <button id="spinBtn">ÇEVİR</button>
+      <p id="result"></p>
     </div>
-
-    <button onclick="spin()">ÇEVİR</button>
-
-    <div id="result"></div>
   </div>
 
   <script src="script.js"></script>
