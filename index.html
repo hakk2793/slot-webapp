@@ -2,56 +2,32 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Slot Oyunu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot Oyunu</title>
 
-  <style>
-    body {
-      margin: 0;
-      background: black;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-    }
-
-    #container {
-      text-align: center;
-    }
-
-    button {
-      background: gold;
-      border: none;
-      padding: 15px 30px;
-      font-size: 20px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    #slotArea {
-      display: none;
-      margin-top: 30px;
-    }
-
-    #reels {
-      font-size: 50px;
-      margin-top: 20px;
-    }
-  </style>
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div id="container">
-    <button id="startBtn" onclick="startSlot()">SLOT BAŞLAT</button>
+  <div class="container">
+    <h1>🎰 SLOT OYUNU</h1>
 
-    <div id="slotArea">
-      <h2>🎰 SLOT OYUNU</h2>
-      <div id="reels">🍒 | 🍋 | 🔔</div>
+    <div class="slots">
+      <span id="slot1">🍒</span>
+      <span class="line">|</span>
+      <span id="slot2">🍋</span>
+      <span class="line">|</span>
+      <span id="slot3">🔔</span>
     </div>
+
+    <button id="spinBtn">ÇEVİR</button>
+
+    <p id="result"></p>
   </div>
 
+  <!-- JS -->
   <script src="script.js"></script>
+
 </body>
 </html>
