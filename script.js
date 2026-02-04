@@ -7,12 +7,33 @@ const reels = [
   document.getElementById("r5")
 ];
 
-const button = document.getElementById("spinBtn");
+const spinBtn = document.getElementById("spinBtn");
 const result = document.getElementById("result");
+const balanceEl = document.getElementById("balance");
+const slotBox = document.getElementById("slotBox");
 
-button.addEventListener("click", () => {
-  button.disabled = true;
+const spinSound = document.getElementById("spinSound");
+const winSound = document.getElementById("winSound");
+const jackpotSound = document.getElementById("jackpotSound");
+
+let balance = 1000;
+const spinCost = 10;
+
+spinBtn.addEventListener("click", () => {
+  if (balance < spinCost) {
+    result.textContent = "💸 Yetersiz bakiye!";
+    return;
+  }
+
+  balance -= spinCost;
+  balanceEl.textContent = balance;
+
+  spinBtn.disabled = true;
   result.textContent = "";
+  slotBox.className = "slot";
+
+  spinSound.currentTime = 0;
+  spinSound.play();
 
   let finalSymbols = [];
 
@@ -30,7 +51,7 @@ button.addEventListener("click", () => {
 
         if (finalSymbols.length === 5) {
           checkWin(finalSymbols);
-          button.disabled = false;
+          spinBtn.disabled = false;
         }
       }
     }, 70);
@@ -42,17 +63,27 @@ function checkWin(arr) {
   arr.forEach(s => counts[s] = (counts[s] || 0) + 1);
   const max = Math.max(...Object.values(counts));
 
+  let win = 0;
+
   if (max === 5) {
-    result.textContent = "💥 JACKPOT! 💥";
-    result.style.color = "gold";
+    win = 500;
+    result.textContent = "💥 JACKPOT!";
+    slotBox.classList.add("jackpot");
+    jackpotSound.play();
   } else if (max === 4) {
-    result.textContent = "🔥 BÜYÜK KAZANÇ!";
-    result.style.color = "orange";
+    win = 100;
+    result.textContent = "🔥 Büyük Kazanç!";
+    slotBox.classList.add("win");
+    winSound.play();
   } else if (max === 3) {
-    result.textContent = "✅ KAZANDIN!";
-    result.style.color = "lime";
+    win = 30;
+    result.textContent = "✅ Kazandın!";
+    slotBox.classList.add("win");
+    winSound.play();
   } else {
     result.textContent = "❌ Kaybettin";
-    result.style.color = "#ccc";
   }
+
+  balance += win;
+  balanceEl.textContent = balance;
 }
