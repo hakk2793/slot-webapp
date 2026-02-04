@@ -1,41 +1,26 @@
 const symbols = ["🍒", "🍋", "🔔", "🍉", "⭐"];
 
-function startSlot() {
-  document.getElementById("slotArea").style.display = "block";
-  document.getElementById("startBtn").style.display = "none";
+const slot1 = document.getElementById("slot1");
+const slot2 = document.getElementById("slot2");
+const slot3 = document.getElementById("slot3");
 
-  spin();
-}
+const button = document.getElementById("spinBtn");
+const result = document.getElementById("result");
 
-function spin() {
-  const reels = document.getElementById("reels");
+button.addEventListener("click", () => {
+  // Rastgele semboller
+  const s1 = symbols[Math.floor(Math.random() * symbols.length)];
+  const s2 = symbols[Math.floor(Math.random() * symbols.length)];
+  const s3 = symbols[Math.floor(Math.random() * symbols.length)];
 
-  let count = 0;
+  slot1.textContent = s1;
+  slot2.textContent = s2;
+  slot3.textContent = s3;
 
-  const interval = setInterval(() => {
-    const a = symbols[Math.floor(Math.random() * symbols.length)];
-    const b = symbols[Math.floor(Math.random() * symbols.length)];
-    const c = symbols[Math.floor(Math.random() * symbols.length)];
-
-    reels.textContent = `${a} | ${b} | ${c}`;
-
-    count++;
-
-    if (count > 15) {
-      clearInterval(interval);
-      checkWin(a, b, c);
-    }
-  }, 100);
-}
-
-function checkWin(a, b, c) {
-  if (a === b && b === c) {
-    setTimeout(() => {
-      alert("🎉 KAZANDIN!");
-    }, 200);
+  // Kazanma kontrolü
+  if (s1 === s2 && s2 === s3) {
+    result.textContent = "🎉 KAZANDIN!";
   } else {
-    setTimeout(() => {
-      alert("😅 Tekrar dene");
-    }, 200);
+    result.textContent = "😅 Tekrar dene";
   }
-}
+});
