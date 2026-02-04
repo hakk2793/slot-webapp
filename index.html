@@ -2,39 +2,56 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Slot WebApp</title>
+  <title>Slot Oyunu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       margin: 0;
-      background: #0b0b0b;
-      color: #fff;
-      font-family: Arial, sans-serif;
+      background: black;
+      color: white;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
+      font-family: Arial, sans-serif;
     }
+
+    #container {
+      text-align: center;
+    }
+
     button {
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
       background: gold;
+      border: none;
+      padding: 15px 30px;
+      font-size: 20px;
+      border-radius: 10px;
       cursor: pointer;
+    }
+
+    #slotArea {
+      display: none;
+      margin-top: 30px;
+    }
+
+    #reels {
+      font-size: 50px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-<button onclick="alert('Slot çalışıyor 🎰')">
-  SLOT BAŞLAT
-</button>
-<div id="slotArea" style="display:none; text-align:center; color:white; margin-top:40px;">
-  <h2>🎰 SLOT OYUNU</h2>
-  <div id="reels" style="font-size:40px;">
-    🍒 | 🍋 | 🔔
+  <div id="container">
+    <button id="startBtn" onclick="startSlot()">SLOT BAŞLAT</button>
+
+    <div id="slotArea">
+      <h2>🎰 SLOT OYUNU</h2>
+      <div id="reels">🍒 | 🍋 | 🔔</div>
+    </div>
   </div>
-</div>
-</body> <script src="script.js"></script>
+
+  <script src="script.js"></script>
+</body>
 </html>
