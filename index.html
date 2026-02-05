@@ -1,28 +1,49 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Slot Oyunu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tech Slot</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="slot-container">
-    <div class="reels">
-      <div class="reel">🍒</div>
-      <div class="reel">🍋</div>
-      <div class="reel">🍉</div>
-    </div>
+<div class="bg"></div>
 
-    <div class="info">
-      <div>Bakiye: <span id="balance">1000</span></div>
-      <div id="result"></div>
-    </div>
+<div class="slot-container" id="slot">
+  <h1>🎰 TECH SLOT</h1>
 
-    <button id="spinBtn">SPIN</button>
+  <div class="top-bar">
+    <div>💰 Bakiye: <span id="balance">1000</span></div>
+    <div>
+      🎡 Makara:
+      <select id="reelCount">
+        <option value="3">3</option>
+        <option value="5" selected>5</option>
+        <option value="7">7</option>
+      </select>
+    </div>
+    <div>
+      💵 Bahis:
+      <button id="betMinus">-</button>
+      <span id="bet">10</span>
+      <button id="betPlus">+</button>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <div class="reels" id="reels"></div>
+
+  <div class="buttons">
+    <button id="spinBtn">🎰 SPIN</button>
+    <button id="autoBtn">🔁 AUTO</button>
+    <button id="turboBtn">⚡ TURBO</button>
+  </div>
+
+  <div class="result" id="result"></div>
+</div>
+
+<div class="jackpot" id="jackpot">JACKPOT!</div>
+
+<script src="script.js"></script>
 </body>
 </html>
