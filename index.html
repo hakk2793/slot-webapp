@@ -2,50 +2,134 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TECH SLOT</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(180deg,#00e5ff,#003b44);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.slot-box{
+  background:#050b12;
+  padding:20px;
+  border-radius:14px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 0 25px rgba(0,255,255,.4);
+  color:#fff;
+}
+
+.reels{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:15px 0;
+}
+
+.reel{
+  width:48px;
+  height:48px;
+  background:#0e1a25;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:28px;
+  box-shadow:inset 0 0 10px rgba(0,255,255,.4);
+}
+
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#00f5ff;
+  color:#003b44;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:active{transform:scale(.96)}
+
+.info{
+  margin-top:10px;
+  font-size:14px;
+  opacity:.9;
+}
+</style>
 </head>
+
 <body>
 
-<div id="screenFlash"></div>
-<div id="jackpotText">💥 JACKPOT 💥</div>
+<div class="slot-box">
+  <h3>🎰 TECH SLOT</h3>
+  <div class="info">💰 Bakiye: <span id="balance">1000</span></div>
 
-<div class="slot-container" id="slotBox">
-  <h1>🎰 TECH SLOT</h1>
-
-  <div class="top">
-    <div>💰 <span id="balance">1000</span></div>
-
-    <select id="reelCount">
-      <option>3</option>
-      <option>5</option>
-      <option selected>7</option>
-    </select>
-
-    <div class="bet">
-      <button id="betMinus">−</button>
-      <span id="bet">40</span>
-      <button id="betPlus">+</button>
-    </div>
+  <div class="reels">
+    <div class="reel" id="r1">🍒</div>
+    <div class="reel" id="r2">🍋</div>
+    <div class="reel" id="r3">⭐</div>
   </div>
 
-  <div id="reels" class="reels"></div>
-
-  <button id="spinBtn">ÇEVİR</button>
-
-  <div class="toggles">
-    <label><input type="checkbox" id="autoSpin"> AUTO</label>
-    <label><input type="checkbox" id="turbo"> TURBO</label>
-  </div>
-
-  <div id="result"></div>
+  <button onclick="spin()">ÇEVİR</button>
+  <div class="info" id="result">Hazır</div>
 </div>
 
-<audio id="spinSound" src="sounds/spin.m4a"></audio>
-<audio id="winSound" src="sounds/win.m4a"></audio>
-<audio id="jackpotSound" src="sounds/jackpot.m4a"></audio>
+<audio id="spinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spin-1930.mp3"></audio>
+<audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
 
-<script src="script.js"></script>
+<script>
+const symbols = ["🍒","🍋","🍉","⭐","🍇"];
+let balance = 1000;
+let loseStreak = 0;
+
+function randSym(){
+  return symbols[Math.floor(Math.random()*symbols.length)];
+}
+
+function spin(){
+  if(balance < 10) return;
+
+  balance -= 10;
+  document.getElementById("spinSound").play();
+
+  let winChance = 0.18;
+  if(loseStreak >= 3) winChance = 0.35; // akıllı denge
+
+  let isWin = Math.random() < winChance;
+
+  let a,b,c;
+
+  if(isWin){
+    a = b = c = randSym();
+    balance += 40;
+    loseStreak = 0;
+    document.getElementById("winSound").play();
+    document.getElementById("result").innerText = "🎉 Kazandın!";
+  }else{
+    // near-miss
+    a = randSym();
+    b = a;
+    c = randSym();
+    if(c === a) c = randSym();
+    loseStreak++;
+    document.getElementById("result").innerText = "😅 Az daha!";
+  }
+
+  document.getElementById("r1").innerText = a;
+  document.getElementById("r2").innerText = b;
+  document.getElementById("r3").innerText = c;
+  document.getElementById("balance").innerText = balance;
+}
+</script>
+
 </body>
 </html>
