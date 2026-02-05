@@ -13,37 +13,40 @@
   <div class="jackpot-text">JACKPOT</div>
 </div>
 
-<div class="slot-container">
-  <h1>🎰 TECH SLOT</h1>
+<div class="page">
+  <div class="slot-container">
 
-  <div class="top-bar">
-    <div>💰 Bakiye: <span id="balance">1000</span></div>
-    <div>🎁 Free: <span id="freeSpin">0</span></div>
-    <div>
-      🎡
-      <select id="reelCount">
-        <option value="3">3</option>
-        <option value="5" selected>5</option>
-        <option value="7">7</option>
-      </select>
+    <h1>🎰 TECH SLOT</h1>
+
+    <div class="top-bar">
+      <div>💰 <span id="balance">1000</span></div>
+      <div>🎁 <span id="freeSpin">0</span></div>
+      <div class="bet-box">
+        <button id="betMinus">−</button>
+        <span id="bet">10</span>
+        <button id="betPlus">+</button>
+      </div>
     </div>
+
+    <div class="reels" id="reels"></div>
+
+    <div class="buttons">
+      <button id="spinBtn">SPIN</button>
+      <button id="autoBtn">AUTO</button>
+      <button id="turboBtn">TURBO</button>
+    </div>
+
+    <button id="bonusBtn" class="bonus">🎁 BONUS</button>
+
+    <div id="result" class="result"></div>
+
   </div>
-
-  <div class="reels" id="reels"></div>
-
-  <div class="buttons">
-    <button id="spinBtn">SPIN</button>
-    <button id="autoBtn">AUTO</button>
-    <button id="turboBtn">TURBO</button>
-    <button id="bonusBtn">🎁 BONUS</button>
-  </div>
-
-  <div id="result" class="result"></div>
 </div>
 
-<audio id="spinSound" src="sounds/spin.mp3"></audio>
-<audio id="winSound" src="sounds/win.mp3"></audio>
-<audio id="jackpotSound" src="sounds/jackpot.mp3"></audio>
+<!-- SESLER -->
+<audio id="spinSound" src="sounds/spin.mp3" preload="auto"></audio>
+<audio id="winSound" src="sounds/win.mp3" preload="auto"></audio>
+<audio id="jackpotSound" src="sounds/jackpot.mp3" preload="auto"></audio>
 
 <script src="script.js"></script>
 </body>
