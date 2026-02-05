@@ -2,7 +2,6 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tech Slot</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -10,7 +9,7 @@
 
 <div class="bg"></div>
 
-<div class="slot-container" id="slot">
+<div class="slot-container">
   <h1>🎰 TECH SLOT</h1>
 
   <div class="top-bar">
@@ -31,18 +30,21 @@
     </div>
   </div>
 
-  <div class="reels" id="reels"></div>
+  <div id="reels" class="reels"></div>
 
   <div class="buttons">
-    <button id="spinBtn">🎰 SPIN</button>
-    <button id="autoBtn">🔁 AUTO</button>
+    <button id="spinBtn">🔄 SPIN</button>
+    <button id="autoBtn">🤖 AUTO</button>
     <button id="turboBtn">⚡ TURBO</button>
   </div>
 
-  <div class="result" id="result"></div>
+  <div id="result" class="result"></div>
 </div>
 
-<div class="jackpot" id="jackpot">JACKPOT!</div>
+<!-- SESLER -->
+<audio id="spinSound" src="sounds/spin.mp3"></audio>
+<audio id="winSound" src="sounds/win.mp3"></audio>
+<audio id="jackpotSound" src="sounds/jackpot.mp3"></audio>
 
 <script src="script.js"></script>
 </body>
