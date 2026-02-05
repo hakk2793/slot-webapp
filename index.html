@@ -9,7 +9,6 @@
 
 <div class="bg"></div>
 
-<!-- JACKPOT OVERLAY -->
 <div id="jackpotOverlay" class="jackpot-overlay">
   <div class="jackpot-text">JACKPOT</div>
 </div>
@@ -19,28 +18,24 @@
 
   <div class="top-bar">
     <div>💰 Bakiye: <span id="balance">1000</span></div>
+    <div>🎁 Free: <span id="freeSpin">0</span></div>
     <div>
-      🎡 Makara:
+      🎡
       <select id="reelCount">
         <option value="3">3</option>
         <option value="5" selected>5</option>
         <option value="7">7</option>
       </select>
     </div>
-    <div>
-      💵 Bahis:
-      <button id="betMinus">-</button>
-      <span id="bet">10</span>
-      <button id="betPlus">+</button>
-    </div>
   </div>
 
-  <div id="reels" class="reels"></div>
+  <div class="reels" id="reels"></div>
 
   <div class="buttons">
-    <button id="spinBtn">🔄 SPIN</button>
-    <button id="autoBtn">🤖 AUTO</button>
-    <button id="turboBtn">⚡ TURBO</button>
+    <button id="spinBtn">SPIN</button>
+    <button id="autoBtn">AUTO</button>
+    <button id="turboBtn">TURBO</button>
+    <button id="bonusBtn">🎁 BONUS</button>
   </div>
 
   <div id="result" class="result"></div>
