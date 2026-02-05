@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>TECH SLOT</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TECH SLOT</title>
 
 <style>
 body{
@@ -12,174 +12,190 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:linear-gradient(180deg,#00f5ff,#00343b);
+  background:linear-gradient(180deg,#00e5ff,#003c46);
   font-family:Arial,Helvetica,sans-serif;
 }
 
 .slot{
   background:#050b12;
-  padding:22px;
-  width:330px;
-  border-radius:16px;
-  text-align:center;
-  box-shadow:0 0 30px rgba(0,255,255,.45);
   color:#fff;
+  width:320px;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 0 30px rgba(0,255,255,.4);
+  text-align:center;
+}
+
+h2{margin:0 0 10px}
+
+.info{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:10px;
 }
 
 .reels{
   display:flex;
   justify-content:center;
   gap:10px;
-  margin:16px 0;
+  margin:15px 0;
 }
 
 .reel{
-  width:52px;
-  height:52px;
-  background:#0d1c26;
-  border-radius:12px;
+  width:50px;
+  height:50px;
+  background:#0c1f2a;
+  border-radius:10px;
   display:flex;
   justify-content:center;
   align-items:center;
   font-size:30px;
-  box-shadow:inset 0 0 12px rgba(0,255,255,.4);
+  box-shadow:inset 0 0 10px #00ffff;
+  animation:none;
 }
 
-button{
-  width:100%;
-  padding:12px;
+.spinAnim{
+  animation:spin .25s linear infinite;
+}
+
+@keyframes spin{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(-10px)}
+}
+
+.controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+select,button{
   border:none;
-  border-radius:12px;
-  background:#00f5ff;
-  color:#00343b;
+  border-radius:8px;
+  padding:6px 10px;
+  font-size:14px;
+}
+
+.bet button{
+  width:30px;
+}
+
+.spin{
+  width:100%;
+  background:#00f7ff;
+  padding:12px;
   font-size:16px;
   font-weight:bold;
-  cursor:pointer;
+  border-radius:10px;
 }
 
-button:active{transform:scale(.97)}
-
-.info{
-  font-size:14px;
-  opacity:.9;
-}
-
-#jackpotText{
-  position:fixed;
-  inset:0;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  font-size:48px;
-  font-weight:bold;
-  color:#fff;
-  background:rgba(0,0,0,.7);
-  z-index:999;
+.msg{
+  margin-top:10px;
+  height:20px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="jackpotText">💥 JACKPOT 💥</div>
-
 <div class="slot">
-  <h3>🎰 TECH SLOT</h3>
-  <div class="info">💰 Bakiye: <span id="balance">1000</span></div>
-  <div class="info">💸 Bahis: <span id="bet">10</span></div>
+  <h2>🎰 TECH SLOT</h2>
 
-  <div class="reels">
-    <div class="reel" id="r1">🍒</div>
-    <div class="reel" id="r2">🍋</div>
-    <div class="reel" id="r3">⭐</div>
+  <div class="info">
+    <div>💰 <span id="balance">1000</span></div>
+    <div>🎯 Bahis: <span id="bet">10</span></div>
   </div>
 
-  <button onclick="spin()">ÇEVİR</button>
-  <div class="info" id="msg">Hazır</div>
+  <div class="controls">
+    <select id="reelCount">
+      <option value="3">Makara 3</option>
+      <option value="5">Makara 5</option>
+      <option value="7">Makara 7</option>
+    </select>
+
+    <div class="bet">
+      <button onclick="changeBet(-10)">-</button>
+      <button onclick="changeBet(10)">+</button>
+    </div>
+  </div>
+
+  <div class="reels" id="reels"></div>
+
+  <button class="spin" onclick="spin()">ÇEVİR</button>
+
+  <div class="msg" id="msg"></div>
 </div>
 
-<audio id="spinS" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spin-1930.mp3"></audio>
-<audio id="winS" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
+<!-- SESLER -->
+<audio id="spinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spin-1930.mp3"></audio>
+<audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-notification-2018.mp3"></audio>
 
 <script>
-const symbols=["🍒","🍋","🍉","⭐","🍇"];
+const symbols=["🍒","⭐","🍉","🍋","🍇"];
 let balance=1000;
 let bet=10;
-let lose=0;
-let audioUnlocked=false;
 
-function unlockAudio(){
-  if(audioUnlocked) return;
-  document.getElementById("spinS").play().then(()=>{});
-  audioUnlocked=true;
+const reelsDiv=document.getElementById("reels");
+const msg=document.getElementById("msg");
+
+function renderReels(){
+  reelsDiv.innerHTML="";
+  let count=document.getElementById("reelCount").value;
+  for(let i=0;i<count;i++){
+    let d=document.createElement("div");
+    d.className="reel";
+    d.textContent="❔";
+    reelsDiv.appendChild(d);
+  }
 }
+renderReels();
+reelCount.onchange=renderReels;
 
-function rand(){
-  return symbols[Math.floor(Math.random()*symbols.length)];
+function changeBet(v){
+  bet=Math.max(10,bet+v);
+  document.getElementById("bet").textContent=bet;
 }
 
 function spin(){
-  unlockAudio();
-
-  if(balance<bet) return;
-  balance-=bet;
-  document.getElementById("spinS").play();
-
-  let winChance=0.2;
-  if(lose>=3) winChance=0.4;
-
-  let win=Math.random()<winChance;
-  let a,b,c;
-
-  if(win){
-    a=b=c=rand();
-    let prize=bet*4;
-    balance+=prize;
-    lose=0;
-    document.getElementById("winS").play();
-    document.getElementById("msg").innerText="🎉 Kazandın +"+prize;
-
-    if(Math.random()<0.15){
-      showJackpot();
-    }
-  }else{
-    a=rand(); b=a; c=rand();
-    if(c===a) c=rand();
-    lose++;
-    document.getElementById("msg").innerText="😅 Az daha!";
+  if(balance<bet){
+    msg.textContent="❌ Bakiye yok";
+    return;
   }
 
-  r1.innerText=a;
-  r2.innerText=b;
-  r3.innerText=c;
-  balanceEl();
-}
+  balance-=bet;
+  document.getElementById("balance").textContent=balance;
+  msg.textContent="";
+  spinSound.play();
 
-function balanceEl(){
-  document.getElementById("balance").innerText=balance;
-  document.getElementById("bet").innerText=bet;
-}
+  let reels=[...document.querySelectorAll(".reel")];
+  reels.forEach(r=>r.classList.add("spinAnim"));
 
-function showJackpot(){
-  const j=document.getElementById("jackpotText");
-  j.style.display="flex";
-  document.body.style.animation="shake .1s 6";
   setTimeout(()=>{
-    j.style.display="none";
-    document.body.style.animation="";
-  },1200);
+    reels.forEach(r=>{
+      r.classList.remove("spinAnim");
+      r.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+    });
+    checkWin();
+  },800);
 }
 
-const style=document.createElement("style");
-style.innerHTML=`
-@keyframes shake{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-6px)}
-  50%{transform:translateX(6px)}
-  75%{transform:translateX(-6px)}
-  100%{transform:translateX(0)}
-}`;
-document.head.appendChild(style);
+function checkWin(){
+  let reels=[...document.querySelectorAll(".reel")];
+  let vals=reels.map(r=>r.textContent);
+  let win=vals.every(v=>v===vals[0]);
+
+  if(win){
+    let prize=bet*5;
+    balance+=prize;
+    document.getElementById("balance").textContent=balance;
+    winSound.play();
+    msg.textContent="🎉 KAZANDIN +"+prize;
+  }else{
+    msg.textContent="😅 Az daha!";
+  }
+}
 </script>
 
 </body>
