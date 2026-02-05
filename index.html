@@ -8,23 +8,34 @@
 </head>
 <body>
 
-  <div class="game">
-    <h1>🎰 SLOT OYUNU</h1>
-    <div class="balance">💰 Bakiye: <span id="balance">1000</span></div>
+<div class="game">
+  <h1>🎰 SLOT</h1>
 
-    <div class="reels">
-      <div class="reel">🍒</div>
-      <div class="reel">🍋</div>
-      <div class="reel">🍉</div>
-      <div class="reel">🍇</div>
-      <div class="reel">⭐</div>
+  <div class="top">
+    <div>💰 Bakiye: <span id="balance">1000</span></div>
+    <div>
+      Bahis:
+      <button id="betMinus">−</button>
+      <span id="bet">10</span>
+      <button id="betPlus">+</button>
     </div>
-
-    <button id="spinBtn">ÇEVİR</button>
-
-    <div id="result"></div>
   </div>
 
-  <script src="script.js"></script>
+  <div class="reels">
+    <div class="reel">🍒</div>
+    <div class="reel">🍋</div>
+    <div class="reel">🍉</div>
+    <div class="reel">🍇</div>
+    <div class="reel">⭐</div>
+  </div>
+
+  <div class="payline"></div>
+
+  <button id="spinBtn">ÇEVİR</button>
+
+  <div id="result"></div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
