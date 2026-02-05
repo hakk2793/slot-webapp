@@ -1,44 +1,28 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Slot Oyunu</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="slot-container">
-  <h1>🎰 SLOT</h1>
+  <div class="slot-container">
+    <div class="reels">
+      <div class="reel">🍒</div>
+      <div class="reel">🍋</div>
+      <div class="reel">🍉</div>
+    </div>
 
-  <div class="top-bar">
-    <div>💰 Bakiye: <span id="balance">1000</span></div>
-    <div>
-      🎯 Makara:
-      <select id="reelCount">
-        <option value="3">3</option>
-        <option value="5" selected>5</option>
-        <option value="7">7</option>
-      </select>
+    <div class="info">
+      <div>Bakiye: <span id="balance">1000</span></div>
+      <div id="result"></div>
     </div>
-    <div>
-      💵 Bahis:
-      <button id="betMinus">-</button>
-      <span id="bet">10</span>
-      <button id="betPlus">+</button>
-    </div>
+
+    <button id="spinBtn">SPIN</button>
   </div>
 
-  <div id="reels" class="reels"></div>
-
-  <div class="buttons">
-    <button id="spinBtn">🎰 SPIN</button>
-    <button id="autoBtn">🔁 AUTO</button>
-    <button id="turboBtn">⚡ TURBO</button>
-  </div>
-
-  <div id="result" class="result"></div>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
