@@ -14,7 +14,7 @@ body {
   position: fixed;
   inset: 0;
   background: radial-gradient(circle at top, #0ff, #000 70%);
-  filter: blur(30px);
+  filter: blur(35px);
   z-index: -1;
 }
 
@@ -35,7 +35,6 @@ body {
   font-size: 14px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
 }
 
 /* MAKARALAR */
@@ -52,11 +51,11 @@ body {
   font-size: 32px;
   background: #000;
   border-radius: 10px;
-  box-shadow: inset 0 0 10px #0ff;
+  box-shadow: inset 0 0 12px #0ff;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pop 0.3s ease;
+  animation: pop 0.25s ease;
 }
 
 /* BUTONLAR */
@@ -79,28 +78,42 @@ body {
   font-size: 18px;
 }
 
-/* JACKPOT EFEKT */
-.jackpot {
-  animation: shake 0.4s infinite, flash 0.5s infinite;
+/* JACKPOT OVERLAY */
+.jackpot-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.jackpot-overlay.show {
+  display: flex;
+}
+
+.jackpot-text {
+  font-size: 60px;
   color: gold;
-  font-size: 26px;
+  animation: explode 0.8s infinite alternate, shake 0.3s infinite;
+  text-shadow: 0 0 40px gold;
+}
+
+@keyframes explode {
+  from { transform: scale(1); }
+  to { transform: scale(1.3); }
 }
 
 @keyframes shake {
   0% { transform: translate(0); }
-  25% { transform: translate(-4px, 4px); }
-  50% { transform: translate(4px, -4px); }
-  75% { transform: translate(-4px, -4px); }
+  25% { transform: translate(-6px, 6px); }
+  50% { transform: translate(6px, -6px); }
+  75% { transform: translate(-6px, -6px); }
   100% { transform: translate(0); }
 }
 
-@keyframes flash {
-  0% { text-shadow: 0 0 10px gold; }
-  50% { text-shadow: 0 0 30px gold; }
-  100% { text-shadow: 0 0 10px gold; }
-}
-
 @keyframes pop {
-  from { transform: scale(0.7); }
+  from { transform: scale(0.6); }
   to { transform: scale(1); }
 }
