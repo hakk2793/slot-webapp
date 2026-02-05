@@ -1,71 +1,82 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: radial-gradient(circle, #111, #000);
-  color: #fff;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #050505, #0b1d1f, #020202);
+  background-size: 300% 300%;
+  animation: bgFlow 12s ease infinite;
   font-family: Arial, sans-serif;
-  text-align: center;
+  color: #fff;
+}
+
+@keyframes bgFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .slot-container {
-  max-width: 420px;
-  margin: 20px auto;
+  background: rgba(0,0,0,0.65);
   padding: 20px;
-  border-radius: 15px;
-  background: #1a1a1a;
-  box-shadow: 0 0 20px #00ffd5;
-}
-
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  margin-bottom: 10px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow:
+    0 0 20px rgba(0,255,255,0.25),
+    0 0 60px rgba(0,255,255,0.15);
 }
 
 .reels {
   display: flex;
+  gap: 12px;
   justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
+  margin-bottom: 16px;
 }
 
 .reel {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
+  background: #000;
+  border-radius: 10px;
   font-size: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
-  border-radius: 10px;
-  border: 2px solid #00ffd5;
 }
 
-.spinning {
+.reel.spinning {
   animation: spin 0.2s linear infinite;
 }
 
 @keyframes spin {
   0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
 }
 
-.buttons button {
-  margin: 5px;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  background: #00ffd5;
-  color: #000;
+.reel.win {
+  box-shadow: 0 0 15px gold;
 }
 
-.buttons button.active {
-  background: gold;
-}
-
-.result {
-  margin-top: 10px;
+button {
+  margin-top: 12px;
+  padding: 10px 24px;
   font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #00e5ff, #00bcd4);
+  color: #000;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+.info {
+  margin-bottom: 10px;
 }
