@@ -1,5 +1,9 @@
 // ================== ELEMENTLER ==================
-const spinBtn = document.getElementById("spinBtn");
+function clearAnimations() {
+  slots.forEach(slot => {
+    slot.classList.remove("win", "shake", "jackpot");
+  });
+}const spinBtn = document.getElementById("spinBtn");
 const resultText = document.getElementById("result");
 const balanceEl = document.getElementById("balance");
 const slots = document.querySelectorAll(".slot");
@@ -21,7 +25,7 @@ function updateBalance(amount) {
 }
 
 // ================== SPIN BUTONU ==================
-spinBtn.addEventListener("click", () => {
+spinBtn.addEventListener("click", () => {clearAnimations();
   if (balance < spinCost) {
     resultText.textContent = "❌ Yetersiz bakiye!";
     return;
