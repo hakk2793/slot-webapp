@@ -11,6 +11,8 @@ const reelsEl = document.getElementById("reels");
 const resultEl = document.getElementById("result");
 const reelCountEl = document.getElementById("reelCount");
 
+const overlay = document.getElementById("jackpotOverlay");
+
 const spinSound = document.getElementById("spinSound");
 const winSound = document.getElementById("winSound");
 const jackpotSound = document.getElementById("jackpotSound");
@@ -21,7 +23,7 @@ function updateUI() {
 }
 
 function spin() {
-  if (balance < bet) return;
+  if (balance < bet || overlay.classList.contains("show")) return;
 
   balance -= bet;
   spinSound.currentTime = 0;
@@ -53,28 +55,29 @@ function checkWin(results) {
     const win = bet * results.length * 2;
     balance += win;
 
-    resultEl.textContent = "🎉 JACKPOT!";
-    resultEl.className = "result jackpot";
     jackpotSound.currentTime = 0;
     jackpotSound.play();
-  } else if (new Set(results).size <= 2) {
+
+    overlay.classList.add("show");
+    setTimeout(() => overlay.classList.remove("show"), 1800);
+
+    resultEl.textContent = "🔥 JACKPOT!";
+  } 
+  else if (new Set(results).size <= 2) {
     balance += bet * 2;
-    resultEl.textContent = "😎 Kazandın!";
-    resultEl.className = "result";
     winSound.currentTime = 0;
     winSound.play();
-  } else {
+    resultEl.textContent = "😎 Kazandın!";
+  } 
+  else {
     resultEl.textContent = "😢 Kaybettin";
-    resultEl.className = "result";
   }
 
   updateUI();
-
   if (auto) setTimeout(spin, turbo ? 150 : 600);
 }
 
 document.getElementById("spinBtn").onclick = spin;
-
 document.getElementById("autoBtn").onclick = () => auto = !auto;
 document.getElementById("turboBtn").onclick = () => turbo = !turbo;
 
