@@ -60,6 +60,47 @@ function checkWin(results) {
 
   const values = Object.values(counts);
   const maxMatch = Math.max(...values);
+  const symbol = Object.keys(counts).find(k => counts[k] === maxMatch);
+
+  if (maxMatch === 5) {
+    slots.forEach(slot => slot.classList.add("shake"));
+
+    if (symbol === "7️⃣") {
+      updateBalance(500);
+      jackpotSound.play();
+      slots.forEach(slot => slot.classList.add("jackpot"));
+      resultText.textContent = "💥 JACKPOT! +500 💰";
+    } else {
+      updateBalance(200);
+      winSound.play();
+      slots.forEach(slot => slot.classList.add("win"));
+      resultText.textContent = "🎉 5'Lİ KAZANÇ! +200";
+    }
+  } 
+  else if (maxMatch === 4) {
+    updateBalance(100);
+    winSound.play();
+    slots.forEach(slot => slot.classList.add("win"));
+    resultText.textContent = "🔥 4'LÜ KAZANÇ! +100";
+  } 
+  else if (maxMatch === 3) {
+    updateBalance(40);
+    winSound.play();
+    slots.forEach(slot => slot.classList.add("win"));
+    resultText.textContent = "✨ 3'LÜ KAZANÇ! +40";
+  } 
+  else {
+    resultText.textContent = "😅 Kaybettin";
+  }
+}
+  const counts = {};
+
+  results.forEach(sym => {
+    counts[sym] = (counts[sym] || 0) + 1;
+  });
+
+  const values = Object.values(counts);
+  const maxMatch = Math.max(...values);
   const symbol = Object.keys(counts).find(key => counts[key] === maxMatch);
 
   if (maxMatch === 5) {
