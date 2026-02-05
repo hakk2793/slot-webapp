@@ -1,4 +1,5 @@
-const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐"];
+console.log("JS AYAKTA");
+alert("JS AYAKTA");const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐"];
 
 const reelsDiv = document.getElementById("reels");
 const spinBtn = document.getElementById("spinBtn");
