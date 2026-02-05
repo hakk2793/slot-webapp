@@ -1,46 +1,51 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TECH SLOT</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TECH SLOT</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="slot-container">
-    <h1>🎰 TECH SLOT</h1>
+<div id="screenFlash"></div>
+<div id="jackpotText">💥 JACKPOT 💥</div>
 
-    <div class="top-bar">
-      <div class="balance">💰 <span id="balance">1000</span></div>
+<div class="slot-container" id="slotBox">
+  <h1>🎰 TECH SLOT</h1>
 
-      <div class="controls">
-        <label>Makara</label>
-        <select id="reelCount">
-          <option value="3">3</option>
-          <option value="5">5</option>
-          <option value="7" selected>7</option>
-        </select>
-      </div>
+  <div class="top">
+    <div>💰 <span id="balance">1000</span></div>
 
-      <div class="bet-control">
-        <button id="betMinus">−</button>
-        <span id="bet">40</span>
-        <button id="betPlus">+</button>
-      </div>
+    <select id="reelCount">
+      <option>3</option>
+      <option>5</option>
+      <option selected>7</option>
+    </select>
+
+    <div class="bet">
+      <button id="betMinus">−</button>
+      <span id="bet">40</span>
+      <button id="betPlus">+</button>
     </div>
-
-    <div id="reels" class="reels"></div>
-
-    <button id="spinBtn">ÇEVİR</button>
-
-    <div id="result" class="result"></div>
   </div>
 
-  <audio id="spinSound" src="sounds/spin.m4a"></audio>
-  <audio id="winSound" src="sounds/win.m4a"></audio>
-  <audio id="jackpotSound" src="sounds/jackpot.m4a"></audio>
+  <div id="reels" class="reels"></div>
 
-  <script src="script.js"></script>
+  <button id="spinBtn">ÇEVİR</button>
+
+  <div class="toggles">
+    <label><input type="checkbox" id="autoSpin"> AUTO</label>
+    <label><input type="checkbox" id="turbo"> TURBO</label>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<audio id="spinSound" src="sounds/spin.m4a"></audio>
+<audio id="winSound" src="sounds/win.m4a"></audio>
+<audio id="jackpotSound" src="sounds/jackpot.m4a"></audio>
+
+<script src="script.js"></script>
 </body>
 </html>
