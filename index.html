@@ -1,42 +1,180 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tech Slot</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TECH SLOT</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #0ff, #001);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.slot-box {
+  background: #020b14;
+  padding: 20px;
+  border-radius: 20px;
+  width: 340px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 30px #00ffff55;
+}
+
+.reels {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.reel {
+  width: 45px;
+  height: 45px;
+  font-size: 30px;
+  background: #000;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px #0ff;
+}
+
+button {
+  background: linear-gradient(45deg, #00ffd5, #00b3ff);
+  border: none;
+  padding: 12px 30px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#result {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+/* JACKPOT SHOW */
+#jackpot {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,255,255,0.25);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: flash 0.2s infinite alternate;
+  z-index: 999;
+}
+
+#jackpot h1 {
+  font-size: 60px;
+  color: #fff;
+  text-shadow: 0 0 20px gold, 0 0 40px red;
+  animation: shake 0.1s infinite;
+}
+
+@keyframes flash {
+  from { background: rgba(0,255,255,0.2); }
+  to   { background: rgba(255,0,255,0.3); }
+}
+
+@keyframes shake {
+  0% { transform: translate(0); }
+  25% { transform: translate(-5px, 5px); }
+  50% { transform: translate(5px, -5px); }
+  75% { transform: translate(-5px, -5px); }
+  100% { transform: translate(5px, 5px); }
+}
+</style>
 </head>
+
 <body>
 
-<div class="game">
-  <h1>🎰 TECH SLOT</h1>
+<div class="slot-box">
+  <h2>🎰 TECH SLOT</h2>
+  <div>Bakiye: <span id="balance">1000</span></div>
 
-  <div class="top-bar">
-    <div class="balance">💰 <span id="balance">1000</span></div>
-
-    <div class="selector">
-      🎛️ Makara
-      <select id="reelCount">
-        <option value="3">3</option>
-        <option value="5" selected>5</option>
-        <option value="7">7</option>
-      </select>
-    </div>
-
-    <div class="bet">
-      <button id="betMinus">−</button>
-      <span id="bet">10</span>
-      <button id="betPlus">+</button>
-    </div>
+  <div class="reels">
+    <div class="reel">🍒</div>
+    <div class="reel">🍋</div>
+    <div class="reel">🍉</div>
   </div>
 
-  <div id="reels" class="reels"></div>
-
   <button id="spinBtn">ÇEVİR</button>
-
   <div id="result"></div>
 </div>
 
-<script src="script.js"></script>
+<!-- JACKPOT EKRANI -->
+<div id="jackpot">
+  <h1>💥 JACKPOT! 💥</h1>
+</div>
+
+<script>
+const symbols = ["🍒","🍋","🍉","🍇","⭐"];
+const reels = document.querySelectorAll(".reel");
+const spinBtn = document.getElementById("spinBtn");
+const resultText = document.getElementById("result");
+const balanceEl = document.getElementById("balance");
+const jackpot = document.getElementById("jackpot");
+
+let balance = 1000;
+let spinning = false;
+
+spinBtn.onclick = () => {
+  if (spinning) return;
+  if (balance < 10) return;
+
+  spinning = true;
+  balance -= 10;
+  balanceEl.textContent = balance;
+  resultText.textContent = "";
+
+  let final = [];
+
+  reels.forEach((reel, i) => {
+    let count = 0;
+    let max = 15 + i * 5;
+
+    let interval = setInterval(() => {
+      reel.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+      count++;
+      if (count >= max) {
+        clearInterval(interval);
+        final[i] = reel.textContent;
+
+        if (final.length === reels.length) {
+          setTimeout(() => checkWin(final), 300);
+          spinning = false;
+        }
+      }
+    }, 80);
+  });
+};
+
+function checkWin(arr) {
+  if (arr.every(s => s === "⭐")) {
+    balance += 300;
+    balanceEl.textContent = balance;
+    resultText.textContent = "🔥 JACKPOT!";
+    showJackpot();
+  } else {
+    resultText.textContent = "😅 Kaybettin";
+  }
+}
+
+function showJackpot() {
+  jackpot.style.display = "flex";
+  setTimeout(() => {
+    jackpot.style.display = "none";
+  }, 2500);
+}
+</script>
+
 </body>
 </html>
