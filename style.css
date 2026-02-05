@@ -3,24 +3,30 @@
 body {
   margin: 0;
   background: #000;
-  overflow: hidden;
+  height: 100vh;
 }
 
 .bg {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at top, #0ff, #000 70%);
-  filter: blur(35px);
+  background: radial-gradient(circle at top, #00ffff, #000 70%);
+  filter: blur(40px);
   z-index: -1;
 }
 
+.page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .slot-container {
-  width: 360px;
-  margin: 80px auto;
+  width: 340px;
   padding: 20px;
   background: #111;
-  border-radius: 18px;
-  box-shadow: 0 0 25px #0ff;
+  border-radius: 20px;
+  box-shadow: 0 0 25px #00ffff;
   color: #fff;
   text-align: center;
 }
@@ -28,7 +34,22 @@ body {
 .top-bar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 14px;
+}
+
+.bet-box {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.bet-box button {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
 }
 
 .reels {
@@ -39,8 +60,8 @@ body {
 }
 
 .reel {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   font-size: 32px;
   background: #000;
   border-radius: 10px;
@@ -56,15 +77,18 @@ body {
   border-radius: 10px;
   border: none;
   font-weight: bold;
-  cursor: pointer;
 }
 
 #spinBtn { background: #0ff; }
 #autoBtn { background: #00c853; }
 #turboBtn { background: #ffc400; }
 
-#bonusBtn {
+.bonus {
+  margin-top: 8px;
   background: gold;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
   animation: pulse 1.5s infinite;
 }
 
@@ -74,7 +98,7 @@ body {
   100% { box-shadow: 0 0 5px gold; }
 }
 
-.result { margin-top: 10px; font-size: 18px; }
+.result { margin-top: 10px; }
 
 .jackpot-overlay {
   position: fixed;
