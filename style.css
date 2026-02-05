@@ -1,107 +1,118 @@
-* { box-sizing: border-box; font-family: Arial, sans-serif; }
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
 body {
   margin: 0;
-  height: 100vh;
-  background: radial-gradient(circle at top, #2b0040, #000);
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #4b006e, #000);
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
 }
 
-.game {
-  background: rgba(0,0,0,0.6);
+.container {
+  background: rgba(0,0,0,0.75);
   padding: 25px;
   border-radius: 20px;
+  box-shadow: 0 0 40px rgba(255,215,0,0.3);
   text-align: center;
-  box-shadow: 0 0 30px #000;
 }
 
-.top {
+h1 {
+  margin-bottom: 10px;
+}
+
+.info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
-  gap: 10px;
-}
-
-.top button {
-  padding: 2px 10px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .reels {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   justify-content: center;
   margin: 20px 0;
-  position: relative;
 }
 
 .reel {
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   background: #111;
-  border-radius: 15px;
-  font-size: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: inset 0 0 10px #000, 0 0 10px #000;
-}
-
-.reel.spinning {
-  animation: spin 0.3s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0); }
-}
-
-.reel.win {
-  box-shadow: 0 0 20px gold, inset 0 0 10px gold;
-}
-
-.payline {
-  height: 4px;
-  background: gold;
-  width: 0;
-  margin: 0 auto;
-  transition: width 0.3s;
-}
-
-.payline.active {
-  width: 100%;
-}
-
-button#spinBtn {
-  margin-top: 10px;
-  padding: 15px 40px;
-  font-size: 20px;
   border-radius: 12px;
+  font-size: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 10px #000;
+}
+
+/* 🎰 SPIN ANİMASYONU */
+.reel.spinning {
+  animation: spinBlur 0.15s infinite linear;
+}
+
+@keyframes spinBlur {
+  0% { filter: blur(0); }
+  50% { filter: blur(2px); }
+  100% { filter: blur(0); }
+}
+
+/* ✨ KAZANMA GLOW */
+.reel.win {
+  animation: glow 0.6s infinite alternate, shake 0.3s;
+  box-shadow: 0 0 15px gold, 0 0 30px orange;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px gold; }
+  to { box-shadow: 0 0 30px orange; }
+}
+
+/* 💥 SHAKE */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+.controls {
+  margin-top: 15px;
+}
+
+button {
+  background: gold;
+  color: #000;
   border: none;
-  background: linear-gradient(gold, orange);
+  padding: 12px 26px;
+  font-size: 18px;
+  border-radius: 12px;
   cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bet-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bet-controls button {
+  padding: 5px 12px;
+  font-size: 18px;
 }
 
 #result {
   margin-top: 12px;
-  font-size: 20px;
-}
-
-.coin {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-size: 24px;
-  animation: coin 1s forwards;
-}
-
-@keyframes coin {
-  to {
-    transform: translateY(-80px);
-    opacity: 0;
-  }
+  font-size: 18px;
 }
