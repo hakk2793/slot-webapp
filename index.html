@@ -12,17 +12,17 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:linear-gradient(180deg,#00e5ff,#003b44);
+  background:linear-gradient(180deg,#00f5ff,#00343b);
   font-family:Arial,Helvetica,sans-serif;
 }
 
-.slot-box{
+.slot{
   background:#050b12;
-  padding:20px;
-  border-radius:14px;
-  width:320px;
+  padding:22px;
+  width:330px;
+  border-radius:16px;
   text-align:center;
-  box-shadow:0 0 25px rgba(0,255,255,.4);
+  box-shadow:0 0 30px rgba(0,255,255,.45);
   color:#fff;
 }
 
@@ -30,48 +30,63 @@ body{
   display:flex;
   justify-content:center;
   gap:10px;
-  margin:15px 0;
+  margin:16px 0;
 }
 
 .reel{
-  width:48px;
-  height:48px;
-  background:#0e1a25;
-  border-radius:10px;
+  width:52px;
+  height:52px;
+  background:#0d1c26;
+  border-radius:12px;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:28px;
-  box-shadow:inset 0 0 10px rgba(0,255,255,.4);
+  font-size:30px;
+  box-shadow:inset 0 0 12px rgba(0,255,255,.4);
 }
 
 button{
   width:100%;
   padding:12px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   background:#00f5ff;
-  color:#003b44;
+  color:#00343b;
   font-size:16px;
   font-weight:bold;
   cursor:pointer;
 }
 
-button:active{transform:scale(.96)}
+button:active{transform:scale(.97)}
 
 .info{
-  margin-top:10px;
   font-size:14px;
   opacity:.9;
+}
+
+#jackpotText{
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  font-size:48px;
+  font-weight:bold;
+  color:#fff;
+  background:rgba(0,0,0,.7);
+  z-index:999;
 }
 </style>
 </head>
 
 <body>
 
-<div class="slot-box">
+<div id="jackpotText">💥 JACKPOT 💥</div>
+
+<div class="slot">
   <h3>🎰 TECH SLOT</h3>
   <div class="info">💰 Bakiye: <span id="balance">1000</span></div>
+  <div class="info">💸 Bahis: <span id="bet">10</span></div>
 
   <div class="reels">
     <div class="reel" id="r1">🍒</div>
@@ -80,55 +95,91 @@ button:active{transform:scale(.96)}
   </div>
 
   <button onclick="spin()">ÇEVİR</button>
-  <div class="info" id="result">Hazır</div>
+  <div class="info" id="msg">Hazır</div>
 </div>
 
-<audio id="spinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spin-1930.mp3"></audio>
-<audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
+<audio id="spinS" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spin-1930.mp3"></audio>
+<audio id="winS" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
 
 <script>
-const symbols = ["🍒","🍋","🍉","⭐","🍇"];
-let balance = 1000;
-let loseStreak = 0;
+const symbols=["🍒","🍋","🍉","⭐","🍇"];
+let balance=1000;
+let bet=10;
+let lose=0;
+let audioUnlocked=false;
 
-function randSym(){
+function unlockAudio(){
+  if(audioUnlocked) return;
+  document.getElementById("spinS").play().then(()=>{});
+  audioUnlocked=true;
+}
+
+function rand(){
   return symbols[Math.floor(Math.random()*symbols.length)];
 }
 
 function spin(){
-  if(balance < 10) return;
+  unlockAudio();
 
-  balance -= 10;
-  document.getElementById("spinSound").play();
+  if(balance<bet) return;
+  balance-=bet;
+  document.getElementById("spinS").play();
 
-  let winChance = 0.18;
-  if(loseStreak >= 3) winChance = 0.35; // akıllı denge
+  let winChance=0.2;
+  if(lose>=3) winChance=0.4;
 
-  let isWin = Math.random() < winChance;
-
+  let win=Math.random()<winChance;
   let a,b,c;
 
-  if(isWin){
-    a = b = c = randSym();
-    balance += 40;
-    loseStreak = 0;
-    document.getElementById("winSound").play();
-    document.getElementById("result").innerText = "🎉 Kazandın!";
+  if(win){
+    a=b=c=rand();
+    let prize=bet*4;
+    balance+=prize;
+    lose=0;
+    document.getElementById("winS").play();
+    document.getElementById("msg").innerText="🎉 Kazandın +"+prize;
+
+    if(Math.random()<0.15){
+      showJackpot();
+    }
   }else{
-    // near-miss
-    a = randSym();
-    b = a;
-    c = randSym();
-    if(c === a) c = randSym();
-    loseStreak++;
-    document.getElementById("result").innerText = "😅 Az daha!";
+    a=rand(); b=a; c=rand();
+    if(c===a) c=rand();
+    lose++;
+    document.getElementById("msg").innerText="😅 Az daha!";
   }
 
-  document.getElementById("r1").innerText = a;
-  document.getElementById("r2").innerText = b;
-  document.getElementById("r3").innerText = c;
-  document.getElementById("balance").innerText = balance;
+  r1.innerText=a;
+  r2.innerText=b;
+  r3.innerText=c;
+  balanceEl();
 }
+
+function balanceEl(){
+  document.getElementById("balance").innerText=balance;
+  document.getElementById("bet").innerText=bet;
+}
+
+function showJackpot(){
+  const j=document.getElementById("jackpotText");
+  j.style.display="flex";
+  document.body.style.animation="shake .1s 6";
+  setTimeout(()=>{
+    j.style.display="none";
+    document.body.style.animation="";
+  },1200);
+}
+
+const style=document.createElement("style");
+style.innerHTML=`
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-6px)}
+  50%{transform:translateX(6px)}
+  75%{transform:translateX(-6px)}
+  100%{transform:translateX(0)}
+}`;
+document.head.appendChild(style);
 </script>
 
 </body>
