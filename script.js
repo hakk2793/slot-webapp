@@ -1,105 +1,77 @@
-const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐"];
-const reels = document.querySelectorAll(".reel");
-const spinBtn = document.getElementById("spinBtn");
-const resultText = document.getElementById("result");
-const balanceEl = document.getElementById("balance");
-
+const symbols = ["🍒","⭐","🍇","🍉","🔔"];
 let balance = 1000;
-let spinning = false;
+let bet = 10;
+let auto = false;
+let turbo = false;
 
-// Sesler
-const spinSound = new Audio("sounds/spin.m4a");
-const winSound = new Audio("sounds/win.m4a");
-const jackpotSound = new Audio("sounds/jackpot.m4a");
+const balanceEl = document.getElementById("balance");
+const betEl = document.getElementById("bet");
+const reelsEl = document.getElementById("reels");
+const resultEl = document.getElementById("result");
+const jackpotEl = document.getElementById("jackpot");
+const reelCountEl = document.getElementById("reelCount");
+const slotBox = document.getElementById("slot");
 
-spinBtn.addEventListener("click", () => {
-  if (spinning) return;
-  if (balance < 10) {
-    resultText.textContent = "💸 Bakiye bitti";
-    return;
+function buildReels() {
+  reelsEl.innerHTML = "";
+  for (let i = 0; i < reelCountEl.value; i++) {
+    const d = document.createElement("div");
+    d.className = "reel";
+    d.textContent = "❔";
+    reelsEl.appendChild(d);
   }
+}
+buildReels();
 
-  spinning = true;
-  resultText.textContent = "";
-  balance -= 10;
+reelCountEl.onchange = buildReels;
+
+document.getElementById("betPlus").onclick = () => bet += 10;
+document.getElementById("betMinus").onclick = () => bet = Math.max(10, bet - 10);
+
+document.getElementById("spinBtn").onclick = spin;
+document.getElementById("autoBtn").onclick = () => {
+  auto = !auto;
+  if (auto) spin();
+};
+document.getElementById("turboBtn").onclick = () => turbo = !turbo;
+
+function spin() {
+  if (balance < bet) return;
+  balance -= bet;
   balanceEl.textContent = balance;
+  betEl.textContent = bet;
 
-  spinSound.currentTime = 0;
-  spinSound.play();
+  const reels = document.querySelectorAll(".reel");
+  let result = [];
 
-  let finalSymbols = [];
-
-  reels.forEach((reel, index) => {
-    reel.classList.remove("win");
-    reel.classList.add("spinning");
-
-    let count = 0;
-    const max = 15 + index * 5;
-
-    const interval = setInterval(() => {
-      reel.textContent =
-        symbols[Math.floor(Math.random() * symbols.length)];
-      count++;
-
-      if (count >= max) {
-        clearInterval(interval);
-
-        const final =
-          symbols[Math.floor(Math.random() * symbols.length)];
-        reel.textContent = final;
-        finalSymbols[index] = final;
-
-        reel.classList.remove("spinning");
-
-        if (finalSymbols.length === reels.length) {
-          setTimeout(() => {
-            checkWin(finalSymbols);
-            spinning = false;
-          }, 300);
-        }
-      }
-    }, 80);
+  reels.forEach(r => {
+    const s = symbols[Math.floor(Math.random() * symbols.length)];
+    r.textContent = s;
+    result.push(s);
   });
-});
 
-function checkWin(arr) {
-  const first = arr[0];
-  const win = arr.every(s => s === first);
+  const win = result.every(s => s === result[0]);
 
   if (win) {
-    const reward = first === "⭐" ? 200 : 50;
-    balance += reward;
+    const winAmount = bet * result.length * 5;
+    balance += winAmount;
     balanceEl.textContent = balance;
-
-    reels.forEach(r => r.classList.add("win"));
-
-    if (first === "⭐") {
-      jackpotSound.currentTime = 0;
-      jackpotSound.play();
-      resultText.textContent = "💥 JACKPOT!";
-      winFlash();
-    } else {
-      winSound.currentTime = 0;
-      winSound.play();
-      resultText.textContent = "🎉 Kazandın!";
-    }
+    resultEl.textContent = "🎉 Kazandın +" + winAmount;
+    showJackpot();
   } else {
-    resultText.textContent = "😅 Kaybettin";
-    loseEffect();
+    resultEl.textContent = "😕 Kaybettin";
+  }
+
+  if (auto) {
+    setTimeout(spin, turbo ? 200 : 800);
   }
 }
 
-// Efektler
-function winFlash() {
-  document.body.style.filter = "brightness(1.2)";
+function showJackpot() {
+  jackpotEl.style.display = "flex";
+  slotBox.classList.add("shake");
   setTimeout(() => {
-    document.body.style.filter = "brightness(1)";
-  }, 400);
-}
-
-function loseEffect() {
-  document.body.style.filter = "brightness(0.9)";
-  setTimeout(() => {
-    document.body.style.filter = "brightness(1)";
-  }, 300);
+    jackpotEl.style.display = "none";
+    slotBox.classList.remove("shake");
+  }, 1200);
 }
