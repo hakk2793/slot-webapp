@@ -20,7 +20,9 @@ spinBtn.addEventListener("click", () => {
   }
 
   spinning = true;
+  spinBtn.disabled = true;
   resultText.textContent = "";
+
   balance -= 10;
   balanceEl.textContent = balance;
 
@@ -33,15 +35,15 @@ spinBtn.addEventListener("click", () => {
     reel.classList.remove("win");
     reel.classList.add("spinning");
 
-    let spinCount = 0;
-    const maxSpin = 15 + index * 5;
+    let count = 0;
+    const max = 20 + index * 6;
 
     const interval = setInterval(() => {
       reel.textContent =
         symbols[Math.floor(Math.random() * symbols.length)];
-      spinCount++;
+      count++;
 
-      if (spinCount >= maxSpin) {
+      if (count >= max) {
         clearInterval(interval);
 
         const final =
@@ -50,12 +52,12 @@ spinBtn.addEventListener("click", () => {
         finalSymbols[index] = final;
 
         reel.classList.remove("spinning");
-        reel.classList.add("stop");
 
         if (finalSymbols.length === reels.length) {
           setTimeout(() => {
             checkWin(finalSymbols);
             spinning = false;
+            spinBtn.disabled = false;
           }, 300);
         }
       }
@@ -68,7 +70,7 @@ function checkWin(arr) {
   const win = arr.every(s => s === first);
 
   if (win) {
-    const reward = first === "⭐" ? 200 : 50;
+    const reward = first === "⭐" ? 300 : 100;
     balance += reward;
     balanceEl.textContent = balance;
 
@@ -77,7 +79,12 @@ function checkWin(arr) {
     if (first === "⭐") {
       jackpotSound.currentTime = 0;
       jackpotSound.play();
+      document.body.classList.add("jackpot");
       resultText.textContent = "💥 JACKPOT!";
+
+      setTimeout(() => {
+        document.body.classList.remove("jackpot");
+      }, 1500);
     } else {
       winSound.currentTime = 0;
       winSound.play();
