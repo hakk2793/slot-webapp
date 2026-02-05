@@ -2,34 +2,28 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Slot Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot Oyunu</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="slot-container">
-    <div class="top-bar">
-      💰 Bakiye: <span id="balance">1000</span>
-    </div>
+  <h1>🎰 SLOT OYUNU</h1>
 
-    <h1>🎰 SLOT 🎰</h1>
-
-    <div class="slot" id="slotBox">
-      <div class="reel" id="r1">🍒</div>
-      <div class="reel" id="r2">🍋</div>
-      <div class="reel" id="r3">🍊</div>
-      <div class="reel" id="r4">🍉</div>
-      <div class="reel" id="r5">⭐</div>
-    </div>
-
-    <button id="spinBtn">ÇEVİR (-10)</button>
-    <div id="result"></div>
+  <div class="balance">
+    💰 Bakiye: <span id="balance">1000</span>
   </div>
 
-  <audio id="spinSound" src="sounds/spin.mp3"></audio>
-  <audio id="winSound" src="sounds/win.mp3"></audio>
-  <audio id="jackpotSound" src="sounds/jackpot.mp3"></audio>
+  <div class="slots">
+    <div class="slot">🍒</div>
+    <div class="slot">🍒</div>
+    <div class="slot">🍒</div>
+    <div class="slot">🍒</div>
+    <div class="slot">🍒</div>
+  </div>
+
+  <button id="spinBtn">ÇEVİR</button>
+
+  <p id="result"></p>
 
   <script src="script.js"></script>
 </body>
