@@ -1,198 +1,46 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TECH SLOT</title>
-
-<style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:radial-gradient(circle at top, #00f0ff, #001a2e);
-  font-family:Arial, sans-serif;
-  color:#fff;
-}
-
-.slot-box{
-  background:#050b14;
-  padding:20px;
-  border-radius:16px;
-  box-shadow:0 0 30px rgba(0,255,255,.4);
-  text-align:center;
-  width:320px;
-}
-
-h2{margin:5px 0 15px;}
-
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:14px;
-}
-
-select, button{
-  background:#00f0ff;
-  border:none;
-  border-radius:8px;
-  padding:6px 10px;
-  font-weight:bold;
-}
-
-.reels{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-  margin:15px 0;
-}
-
-.reel{
-  width:48px;
-  height:48px;
-  font-size:28px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#000;
-  border-radius:10px;
-  box-shadow:inset 0 0 10px #00f0ff;
-}
-
-.spinning{
-  animation:spin .15s linear infinite;
-}
-
-@keyframes spin{
-  0%{transform:translateY(0)}
-  100%{transform:translateY(-10px)}
-}
-
-.win{
-  box-shadow:0 0 20px gold;
-}
-
-#spinBtn{
-  width:100%;
-  margin-top:10px;
-  font-size:16px;
-}
-
-#result{
-  margin-top:10px;
-  font-weight:bold;
-}
-
-.flash{
-  animation:flash .2s alternate 6;
-}
-
-@keyframes flash{
-  from{background:#050b14}
-  to{background:#2b0033}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TECH SLOT</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-<div class="slot-box" id="box">
-  <h2>🎰 TECH SLOT</h2>
+  <div class="slot-container">
+    <h1>🎰 TECH SLOT</h1>
 
-  <div class="top">
-    <div>💰 <span id="balance">1000</span></div>
-    <div>
-      Makara
-      <select id="reelCount">
-        <option value="3">3</option>
-        <option value="5" selected>5</option>
-        <option value="7">7</option>
-      </select>
+    <div class="top-bar">
+      <div class="balance">💰 <span id="balance">1000</span></div>
+
+      <div class="controls">
+        <label>Makara</label>
+        <select id="reelCount">
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="7" selected>7</option>
+        </select>
+      </div>
+
+      <div class="bet-control">
+        <button id="betMinus">−</button>
+        <span id="bet">40</span>
+        <button id="betPlus">+</button>
+      </div>
     </div>
+
+    <div id="reels" class="reels"></div>
+
+    <button id="spinBtn">ÇEVİR</button>
+
+    <div id="result" class="result"></div>
   </div>
 
-  <div class="reels" id="reels"></div>
+  <audio id="spinSound" src="sounds/spin.m4a"></audio>
+  <audio id="winSound" src="sounds/win.m4a"></audio>
+  <audio id="jackpotSound" src="sounds/jackpot.m4a"></audio>
 
-  <button id="spinBtn">ÇEVİR</button>
-  <div id="result"></div>
-</div>
-
-<script>
-const symbols=["🍒","🍋","🍉","🍇","⭐"];
-let balance=1000;
-let spinning=false;
-
-const spinSound=new Audio("sounds/spin.m4a");
-const winSound=new Audio("sounds/win.m4a");
-const jackpotSound=new Audio("sounds/jackpot.m4a");
-
-const reelsDiv=document.getElementById("reels");
-const balanceEl=document.getElementById("balance");
-const resultEl=document.getElementById("result");
-const reelSelect=document.getElementById("reelCount");
-const box=document.getElementById("box");
-
-function buildReels(){
-  reelsDiv.innerHTML="";
-  for(let i=0;i<reelSelect.value;i++){
-    const d=document.createElement("div");
-    d.className="reel";
-    d.textContent="❓";
-    reelsDiv.appendChild(d);
-  }
-}
-buildReels();
-reelSelect.onchange=buildReels;
-
-document.getElementById("spinBtn").onclick=()=>{
-  if(spinning||balance<10)return;
-  spinning=true;
-  balance-=10;
-  balanceEl.textContent=balance;
-  resultEl.textContent="";
-
-  spinSound.currentTime=0;
-  spinSound.play();
-
-  const reels=[...document.querySelectorAll(".reel")];
-  let final=[];
-
-  reels.forEach((r,i)=>{
-    r.classList.add("spinning");
-    let c=0;
-    const t=setInterval(()=>{
-      r.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-      if(++c>15+i*5){
-        clearInterval(t);
-        const f=symbols[Math.floor(Math.random()*symbols.length)];
-        r.textContent=f;
-        r.classList.remove("spinning");
-        final[i]=f;
-        if(final.length===reels.length)checkWin(final);
-      }
-    },80);
-  });
-};
-
-function checkWin(arr){
-  spinning=false;
-  const win=arr.every(s=>s===arr[0]);
-  if(win){
-    const reward=arr[0]==="⭐"?300:100;
-    balance+=reward;
-    balanceEl.textContent=balance;
-    resultEl.textContent=arr[0]==="⭐"?"💥 JACKPOT!":"🎉 KAZANDIN!";
-    (arr[0]==="⭐"?jackpotSound:winSound).play();
-    box.classList.add("flash");
-    setTimeout(()=>box.classList.remove("flash"),1200);
-  }else{
-    resultEl.textContent="😅 Kaybettin";
-  }
-}
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
