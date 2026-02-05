@@ -1,98 +1,125 @@
-const symbols = ["🍒","🍋","🍉","🍇","⭐"];
+const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐"];
 
-const reelsBox = document.getElementById("reels");
+const reelsDiv = document.getElementById("reels");
+const spinBtn = document.getElementById("spinBtn");
+const autoBtn = document.getElementById("autoBtn");
+const turboBtn = document.getElementById("turboBtn");
+
 const balanceEl = document.getElementById("balance");
 const betEl = document.getElementById("bet");
-const spinBtn = document.getElementById("spinBtn");
-
-const flash = document.getElementById("screenFlash");
-const slotBox = document.getElementById("slotBox");
-const jackpotText = document.getElementById("jackpotText");
-
-const spinSound = document.getElementById("spinSound");
-const winSound = document.getElementById("winSound");
-const jackpotSound = document.getElementById("jackpotSound");
-
-let balance = 1000;
-let bet = 40;
-let loseStreak = 0;
-let spinning = false;
-
-const autoSpin = document.getElementById("autoSpin");
-const turbo = document.getElementById("turbo");
+const resultText = document.getElementById("result");
 const reelSelect = document.getElementById("reelCount");
 
-function createReels(n){
-  reelsBox.innerHTML="";
-  for(let i=0;i<n;i++){
-    const d=document.createElement("div");
-    d.className="reel";
-    reelsBox.appendChild(d);
+let balance = 1000;
+let bet = 10;
+let reelCount = 5;
+
+let spinning = false;
+let autoSpin = false;
+let turbo = false;
+
+function buildReels() {
+  reelsDiv.innerHTML = "";
+  for (let i = 0; i < reelCount; i++) {
+    const div = document.createElement("div");
+    div.className = "reel";
+    div.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    reelsDiv.appendChild(div);
   }
 }
-createReels(+reelSelect.value);
-reelSelect.onchange=()=>createReels(+reelSelect.value);
 
-spinBtn.onclick = spin;
+reelSelect.addEventListener("change", () => {
+  reelCount = Number(reelSelect.value);
+  buildReels();
+});
 
-function spin(){
-  if(spinning || balance<bet) return;
-  spinning=true;
+document.getElementById("betPlus").onclick = () => {
+  bet += 10;
+  betEl.textContent = bet;
+};
 
-  balance-=bet;
-  balanceEl.textContent=balance;
+document.getElementById("betMinus").onclick = () => {
+  if (bet > 10) bet -= 10;
+  betEl.textContent = bet;
+};
 
-  spinSound.currentTime=0;
-  spinSound.play();
+spinBtn.onclick = () => spin();
+autoBtn.onclick = () => {
+  autoSpin = !autoSpin;
+  autoBtn.classList.toggle("active");
+  if (autoSpin) spin();
+};
 
-  const reels=[...document.querySelectorAll(".reel")];
-  let result=[];
-  let winChance = Math.min(loseStreak * 0.1, 0.6); // AKILLI ŞANS
+turboBtn.onclick = () => {
+  turbo = !turbo;
+  turboBtn.classList.toggle("active");
+};
 
-  reels.forEach((r,i)=>{
-    let count=0;
-    const max= turbo.checked ? 6+i : 15+i*4;
-    const int=setInterval(()=>{
-      r.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-      if(++count>max){
-        clearInterval(int);
-        let s = Math.random()<winChance ? symbols[0] : symbols[Math.floor(Math.random()*symbols.length)];
-        r.textContent=s;
-        result[i]=s;
-        if(result.length===reels.length) checkWin(result);
+function spin() {
+  if (spinning) return;
+  if (balance < bet) {
+    resultText.textContent = "💸 Bakiye bitti";
+    autoSpin = false;
+    autoBtn.classList.remove("active");
+    return;
+  }
+
+  spinning = true;
+  resultText.textContent = "";
+  balance -= bet;
+  balanceEl.textContent = balance;
+
+  const reels = document.querySelectorAll(".reel");
+  let final = [];
+
+  reels.forEach((reel, i) => {
+    reel.classList.add("spinning");
+    let count = 0;
+    const max = turbo ? 5 : 15 + i * 5;
+
+    const interval = setInterval(() => {
+      reel.textContent =
+        symbols[Math.floor(Math.random() * symbols.length)];
+      count++;
+
+      if (count >= max) {
+        clearInterval(interval);
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        reel.textContent = symbol;
+        final[i] = symbol;
+        reel.classList.remove("spinning");
+
+        if (final.length === reels.length) {
+          finishSpin(final);
+        }
       }
-    }, turbo.checked ? 40 : 90);
+    }, turbo ? 40 : 80);
   });
 }
 
-function checkWin(arr){
-  const win = arr.every(v=>v===arr[0]);
-  document.querySelectorAll(".reel").forEach(r=>r.classList.remove("win"));
+function finishSpin(arr) {
+  const chance = Math.random();
 
-  if(win){
-    loseStreak=0;
-    let reward = arr[0]==="⭐"? bet*10 : bet*3;
-    balance+=reward;
-    balanceEl.textContent=balance;
-
-    document.querySelectorAll(".reel").forEach(r=>r.classList.add("win"));
-
-    if(arr[0]==="⭐"){
-      jackpotSound.play();
-      flash.classList.add("flash");
-      slotBox.classList.add("shake");
-      jackpotText.classList.add("jackpotShow");
-      setTimeout(()=>{
-        flash.classList.remove("flash");
-        slotBox.classList.remove("shake");
-        jackpotText.classList.remove("jackpotShow");
-      },1000);
-    } else winSound.play();
-
-  } else {
-    loseStreak++;
+  let win = false;
+  if (chance < 0.08) {
+    win = true;
+    arr.fill("⭐");
   }
 
-  spinning=false;
-  if(autoSpin.checked) setTimeout(spin,300);
+  if (win) {
+    const reward = bet * 5;
+    balance += reward;
+    balanceEl.textContent = balance;
+    resultText.textContent = "💥 JACKPOT!";
+  } else {
+    resultText.textContent = "😅 Kaybettin";
+  }
+
+  spinning = false;
+
+  if (autoSpin) {
+    setTimeout(spin, 400);
+  }
 }
+
+buildReels();
