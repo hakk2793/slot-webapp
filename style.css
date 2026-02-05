@@ -84,3 +84,47 @@ button:disabled {
   min-height: 24px;
   color: white;
 }
+/* === KAZANMA ANİMASYONU === */
+.win {
+  animation: glow 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px gold;
+    transform: scale(1);
+  }
+  to {
+    box-shadow: 0 0 20px gold;
+    transform: scale(1.05);
+  }
+}
+
+/* === SHAKE === */
+.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+/* === JACKPOT === */
+.jackpot {
+  animation: jackpotGlow 0.5s infinite alternate;
+}
+
+@keyframes jackpotGlow {
+  from {
+    box-shadow: 0 0 10px red;
+    transform: scale(1);
+  }
+  to {
+    box-shadow: 0 0 30px gold;
+    transform: scale(1.1);
+  }
+}
