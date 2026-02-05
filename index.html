@@ -3,33 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Slot Oyunu</title>
+  <title>Tech Slot</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="game">
-  <h1>🎰 SLOT</h1>
+  <h1>🎰 TECH SLOT</h1>
 
-  <div class="top">
-    <div>💰 Bakiye: <span id="balance">1000</span></div>
-    <div>
-      Bahis:
+  <div class="top-bar">
+    <div class="balance">💰 <span id="balance">1000</span></div>
+
+    <div class="selector">
+      🎛️ Makara
+      <select id="reelCount">
+        <option value="3">3</option>
+        <option value="5" selected>5</option>
+        <option value="7">7</option>
+      </select>
+    </div>
+
+    <div class="bet">
       <button id="betMinus">−</button>
       <span id="bet">10</span>
       <button id="betPlus">+</button>
     </div>
   </div>
 
-  <div class="reels">
-    <div class="reel">🍒</div>
-    <div class="reel">🍋</div>
-    <div class="reel">🍉</div>
-    <div class="reel">🍇</div>
-    <div class="reel">⭐</div>
-  </div>
-
-  <div class="payline"></div>
+  <div id="reels" class="reels"></div>
 
   <button id="spinBtn">ÇEVİR</button>
 
